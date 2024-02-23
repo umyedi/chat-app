@@ -1,0 +1,29 @@
+[2024-02-19 22:59:27] INFO:Server opened.
+[2024-02-19 23:00:23] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '0', 'username': 'COUCOU'}}
+[2024-02-19 23:00:23] INFO:(server.main)response={'status': 'error', 'message': 'Action not found'}
+[2024-02-19 23:01:06] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '0', 'username': 'COUCOU'}}
+[2024-02-19 23:01:06] INFO:(server.main)response={'status': 'error', 'message': 'Action not found'}
+[2024-02-19 23:02:38] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '0', 'username': 'COUCOU'}}
+[2024-02-19 23:02:38] INFO:(server.main)response={'status': 'error', 'message': 'Action not found'}
+[2024-02-19 23:03:00] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '0', 'username': 'COUCOU'}}
+[2024-02-19 23:03:00] INFO:(server.main)response={'status': 'error', 'message': 'Action not found'}
+[2024-02-19 23:03:28] INFO:Server stopped.
+[2024-02-19 23:03:30] INFO:Server opened.
+[2024-02-19 23:03:33] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '0', 'username': 'COUCOU'}}
+[2024-02-19 23:03:33] ERROR:(server.main)[Errno 2] No such file or directory: 'rooms/room_0.json'
+[2024-02-19 23:03:47] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '1', 'username': 'COUCOU'}}
+[2024-02-19 23:03:47] ERROR:(server.main)[Errno 2] No such file or directory: 'rooms/room_1.json'
+[2024-02-19 23:04:31] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '1', 'username': 'COUCOU'}}
+[2024-02-19 23:04:31] ERROR:(server.main)[Errno 2] No such file or directory: 'rooms/room_1.json'
+[2024-02-19 23:04:37] INFO:Server stopped.
+[2024-02-19 23:04:38] INFO:Server opened.
+[2024-02-19 23:04:41] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '1', 'username': 'COUCOU'}}
+[2024-02-19 23:04:41] ERROR:(server.main)[Errno 2] No such file or directory: 'chat_rooms/room_1.json'
+[2024-02-19 23:05:21] INFO:Server opened.
+[2024-02-20 20:18:03] INFO:Server opened.
+[2024-02-20 20:18:39] INFO:(server.main)request={'action': 'join_game', 'params': {'game_id': '1', 'username': 'COUCOU'}}
+[2024-02-20 20:18:39] ERROR:(server.main)[Errno 2] No such file or directory: 'chat_rooms/room_1.json'
+[2024-02-22 17:43:34] INFO:server.py:43:Server started
+[2024-02-22 17:43:37] INFO:server.py:86:Server stopped by KeyboardInterrupt
+[2024-02-22 17:45:53] INFO:server.py:41:Server started
+[2024-02-22 17:45:58] INFO:server.py:84:Server stopped by KeyboardInterrupt

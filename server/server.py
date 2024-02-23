@@ -4,52 +4,82 @@ Ce fichier gère le code coté serveur.
 
 """
 
-
-from server.utils import get_game_status
-from server.logging import logger
+from actions import Actions
+from log import logger
 import sys
-import os
+import json
 import zmq
 
-context = zmq.Context()
-socket = context.socket(zmq.REP)
-socket.bind("tcp://*:5555")
 
-actions = {"get_game_status": get_game_status}
+class Server:
+    def __init__(self, port: str = 5555) -> None:
 
+        self.socket = zmq.Context().socket(zmq.REP)
+        self.socket.bind(f"tcp://*:{port}")
 
-def main():
+        self.is_running = False
 
-    while True:
-        message = socket.recv().decode("utf-8")
-        request = eval(message)
-        logger.info(f"(server.main)request={request}")
+    def format_response(self, status: str = "success", message: str = "", data: dict = None) -> bytes:
+        """Format the response to be sent back to the client.
 
-        try:
-            action = request.get("action")
-            params = request.get("params", {})
+        Args:
+            status (str, optional): Status of the response ('success' or 'error'). Defaults to "success".
+            message (str, optional): Reponse message to be sent to the client. Defaults to None.
+            data (dict, optional): Data to be sent to the client. Defaults to None.
 
-            if action in actions:
-                function = actions[action]
-                response = function(**params)
-            else:
-                response = {"status": "error", "message": "Action not found"}
+        Returns:
+            bytes: Formatted response
+        """
+        response = {"status": status, "message": message}
+        if data is not None:
+            response["data"] = data
+        return json.dumps(response).encode("utf-8")
 
-            socket.send(str(response).encode("utf-8"))
-            logger.info(f"(server.main)response={response}")
+    def run(self):
+        """Runs a while loop that scans for client requests."""
+        
+        logger.info("Server started")
+        self.is_running = True
 
-        except Exception as e:
-            logger.error("(server.main)" + str(e))
-            socket.send(str({"status": "error", "message": e}).encode("utf-8"))
+        while self.is_running:
+            try:
+                client_message = self.socket.recv().decode("utf-8")
+                request = json.loads(client_message)
+                logger.debug(request)
 
+                action = request.get("action")
+                params = request.get("params", {})
+                actions = Actions(params["session_id"])
+                del params["session_id"]
+
+                if actions.exists(action):
+                    response_data = actions.execute(action, params)
+                    response = self.format_response(data=response_data)
+                else:
+                    response = self.format_response(status="error", message="Action not found")
+                
+                self.socket.send(response)
+                logger.debug(response)
+
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON decode error: {str(e)}")
+                self.socket.send(self.format_response(status="error", message="Invalid JSON format"))
+            except KeyError as e:
+                logger.error(f"Missing parameter: {str(e)}")
+                self.socket.send(self.format_response(status="error", message=f"Missing parameter: {e}"))
+            except Exception as e:
+                logger.error(f"Unexpected error: {str(e)}")
+                self.socket.send(self.format_response(status="error", message=str(e)))
+
+        logger.info("Server stopped")
+
+    def stop(self):
+        """Stops the while loop."""
+        self.is_running = False
 
 if __name__ == "__main__":
     try:
-        logger.info("Server opened.")
-        main()
+        Server().run()
     except KeyboardInterrupt:
-        logger.info("Server stopped.")
-        try:
-            sys.exit(130)
-        except SystemExit:
-            os._exit(130)
+        logger.info("Server stopped by KeyboardInterrupt")
+        sys.exit(130)

@@ -1,2 +1,6 @@
-PySide6
-zmq
+PySide6==6.6.2
+PySide6_Addons==6.6.2
+PySide6_Essentials==6.6.2
+pyzmq==25.1.2
+shiboken6==6.6.2
+zmq==0.0.0

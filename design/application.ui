@@ -18,30 +18,86 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>800</width>
-    <height>600</height>
+    <width>16777215</width>
+    <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="main_widget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QListWidget" name="chat_history">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="le_username">
+      <property name="styleSheet">
+       <string notr="true">padding: 3px</string>
+      </property>
+      <property name="placeholderText">
+       <string>Username</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_chat_input">
       <property name="font">
        <font>
         <family>Monospace</family>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">padding: 3px</string>
+      </property>
+      <property name="placeholderText">
+       <string>Enter you message here</string>
+      </property>
      </widget>
     </item>
-    <item>
-     <widget class="QLineEdit" name="chat_input">
+    <item row="1" column="1" colspan="3">
+     <widget class="QListWidget" name="lw_chat_history">
       <property name="font">
        <font>
         <family>Monospace</family>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="pb_game">
+      <property name="styleSheet">
+       <string notr="true">background-color: #5cdb5c</string>
+      </property>
+      <property name="text">
+       <string>Join</string>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLineEdit" name="le_room_id">
+      <property name="styleSheet">
+       <string notr="true">padding: 3px</string>
+      </property>
+      <property name="placeholderText">
+       <string>Room ID (ex: 123456)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="3">
+     <widget class="QListWidget" name="lw_users">
+      <property name="styleSheet">
+       <string notr="true">QListView::item:selected {
+	border: none;
+    background-color: white;
+    color: black;
+}</string>
       </property>
      </widget>
     </item>

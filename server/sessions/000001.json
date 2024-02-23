@@ -1,0 +1,491 @@
+{
+    "users": {
+        "321791": {
+            "username": "User01",
+            "color": "B22222",
+            "last-active": 1708683448
+        },
+        "787180": {
+            "username": "P9257",
+            "color": "0000FE",
+            "last-active": 1708685173
+        },
+        "449747": {
+            "username": "User05",
+            "color": "FF69B2",
+            "last-active": 1708686125
+        },
+        "160685": {
+            "username": "HelloWorlds",
+            "color": "8A2BE1",
+            "last-active": 1708686520
+        }
+    },
+    "game": {
+        "name": "rps",
+        "host": "Utilisateur01",
+        "status": "running",
+        "players": [
+            "Utilisateur02"
+        ],
+        "actions": []
+    },
+    "chat_history": {
+        "02/23/24-10:17:33.294742": {
+            "username": "User01",
+            "content": "Hello!",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:17:39.175216": {
+            "username": "User01",
+            "content": "How are you?",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:18:40.297925": {
+            "username": "User01",
+            "content": "Great and you?",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:19:02.066731": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.\n/time - Displays current time.\n/games - Displays the games available\n/invite [game] [username] - Invite a user to play a game.\n",
+            "viewers": [
+                "User01"
+            ]
+        },
+        "02/23/24-10:20:32.927117": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.\n/time - Displays current time.\n/games - Displays the games available\n/invite [game] [username] - Invite a user to play a game.\n",
+            "viewers": [
+                "User01"
+            ]
+        },
+        "02/23/24-10:20:51.715120": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.\n/time - Displays current time.\n/games - Displays the games available\n/invite [game] [username] - Invite a user to play a game.\n",
+            "viewers": [
+                "User01"
+            ]
+        },
+        "02/23/24-10:24:27.730735": {
+            "username": "User02",
+            "content": "Hello!",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:24:31.989753": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.\n/time - Displays current time.\n/games - Displays the games available\n/invite [game] [username] - Invite a user to play a game.\n",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:25:08.819552": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.<br>/time - Displays current time.<br>/games - Displays the games available<br>/invite [game] [username] - Invite a user to play a game.<br>",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:25:32.841444": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.<br>/time - Displays current time.<br>/games - Displays the games available<br>/invite [game] [username] - Invite a user to play a game.<br>",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:25:37.663130": {
+            "username": "User02",
+            "content": "hi",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:25:40.267342": {
+            "username": "system",
+            "public": false,
+            "content": "/help - List all the commands.<br>/time - Displays current time.<br>/games - Displays the games available<br>/invite [game] [username] - Invite a user to play a game.<br>",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:25:50.047463": {
+            "username": "system",
+            "public": false,
+            "content": "\n\trps - Rock Paper Scissors.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:26:41.524720": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&nbsp/help - List all the commands.<br>&nbsp/time - Displays current time.<br>&nbsp/games - Displays the games available<br>&nbsp/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:27:18.555085": {
+            "username": "system",
+            "public": false,
+            "content": "\n/help - List all the commands.\n/time - Displays current time.\n/games - Displays the games available\n/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:29:01.087462": {
+            "username": "system",
+            "public": false,
+            "content": "&nbsp;&nbsp;&nbsp;&nbsp;<br>/help - List all the commands.&nbsp;&nbsp;&nbsp;&nbsp;<br>/time - Displays current time.&nbsp;&nbsp;&nbsp;&nbsp;<br>/games - Displays the games available&nbsp;&nbsp;&nbsp;&nbsp;<br>/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:29:26.098544": {
+            "username": "system",
+            "public": false,
+            "content": "&emsp;<br>/help - List all the commands.&emsp;<br>/time - Displays current time.&emsp;<br>/games - Displays the games available&emsp;<br>/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:29:37.670989": {
+            "username": "system",
+            "public": false,
+            "content": "       <br>/help - List all the commands.       <br>/time - Displays current time.       <br>/games - Displays the games available       <br>/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:30:33.422273": {
+            "username": "system",
+            "public": false,
+            "content": "&bull<br>/help - List all the commands.&bull<br>/time - Displays current time.&bull<br>/games - Displays the games available&bull<br>/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:30:51.822648": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&bull /help - List all the commands.<br>&bull /time - Displays current time.<br>&bull /games - Displays the games available<br>&bull /invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User02"
+            ]
+        },
+        "02/23/24-10:32:07.591248": {
+            "username": "User03",
+            "content": "hello",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:32:10.634722": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&bull /help - List all the commands.<br>&bull /time - Displays current time.<br>&bull /games - Displays the games available<br>&bull /invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:32:51.857915": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&bull /help - List all the commands.<br>&bull /time - Displays current time.<br>&bull /games - Displays the games available<br>&bull /invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:33:18.819181": {
+            "username": "system",
+            "public": false,
+            "content": "&nbsp;<br>/help - List all the commands.&nbsp;<br>/time - Displays current time.&nbsp;<br>/games - Displays the games available&nbsp;<br>/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:33:49.650788": {
+            "username": "system",
+            "public": false,
+            "content": "----;<br>/help - List all the commands.----;<br>/time - Displays current time.----;<br>/games - Displays the games available----;<br>/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:34:10.223361": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&nbsp;/help - List all the commands.<br>&nbsp;/time - Displays current time.<br>&nbsp;/games - Displays the games available<br>&nbsp;/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:34:27.495016": {
+            "username": "system",
+            "public": false,
+            "content": "<br>-&nbsp;-;/help - List all the commands.<br>-&nbsp;-;/time - Displays current time.<br>-&nbsp;-;/games - Displays the games available<br>-&nbsp;-;/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:34:50.246204": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/help - List all the commands.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/time - Displays current time.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/games - Displays the games available<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:37:17.643486": {
+            "username": "User03",
+            "content": "hello",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:23.026015": {
+            "username": "User03",
+            "content": "how are you?",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:24.602239": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:24.749823": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:24.932169": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:25.105172": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:25.276841": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:25.431039": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:25.587133": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:25.742557": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:25.924017": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:26.097242": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:26.214587": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:29.394317": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:29.519344": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:29.651112": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:31.632319": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:31.779131": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:33.065763": {
+            "username": "User03",
+            "content": "ff",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:34.213635": {
+            "username": "User03",
+            "content": "ff",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:35.165817": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:35.795716": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:36.493010": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:37.577866": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:38.180093": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:38.836290": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:39.546479": {
+            "username": "User03",
+            "content": "f",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:46.983525": {
+            "username": "User03",
+            "content": "hi!",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:37:52.531094": {
+            "username": "system",
+            "public": false,
+            "content": "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/help - List all the commands.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/time - Displays current time.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/games - Displays the games available<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "User03"
+            ]
+        },
+        "02/23/24-10:38:45.775103": {
+            "username": "User03",
+            "content": "hi",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:39:11.671090": {
+            "username": "User03",
+            "content": "hi",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:41:24.310470": {
+            "username": "User04",
+            "content": "Hello",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:41:27.722614": {
+            "username": "system",
+            "public": false,
+            "content": "rps - Rock Paper Scissors.",
+            "viewers": [
+                "User04"
+            ]
+        },
+        "02/23/24-10:42:17.875235": {
+            "username": "User01",
+            "content": "hi",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:45:04.683205": {
+            "username": "system",
+            "content": "hello",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:45:37.134909": {
+            "username": "sys",
+            "content": "hey",
+            "public": true,
+            "viewers": []
+        },
+        "02/23/24-10:46:18.724186": {
+            "username": "system",
+            "public": false,
+            "content": "The command '/chat' doesn't exists.",
+            "viewers": [
+                "P9257"
+            ]
+        },
+        "02/23/24-11:02:11.544671": {
+            "username": "system",
+            "public": false,
+            "content": "rps - Rock Paper Scissors.",
+            "viewers": [
+                "User05"
+            ]
+        },
+        "02/23/24-11:09:28.008422": {
+            "username": "system",
+            "public": false,
+            "content": "\n\t/help - List all the commands.\n\t/time - Displays current time.\n\t/games - Displays the games available\n\t/invite [game] [username] - Invite a user to play a game.",
+            "viewers": [
+                "HelloWorlds"
+            ]
+        }
+    }
+}

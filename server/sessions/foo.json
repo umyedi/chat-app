@@ -1,0 +1,18 @@
+{
+    "users": [
+        ["USERNAME", "USER-ID"],
+        ["USERNAME", "USER-ID"],
+        ["USERNAME", "USER-ID"]
+    ],
+    "game": {
+        "type": "rps",
+        "status": "STATUS",
+        "actions": []
+    },
+    "chat_history": {
+        "TIMESTAMP": {
+            "username": "USERNAME",
+            "content": "CONTENT"
+        }
+    }
+}
