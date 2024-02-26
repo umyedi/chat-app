@@ -1,8 +1,29 @@
 import json
-import time
+import os
+from openai import OpenAI
 from pathlib import Path
 from datetime import datetime
 from random import randint
+
+
+
+# Global variables
+COLORS = [
+    "FE0000",
+    "0000FE",
+    "028002",
+    "B22222",
+    "FE7E4F",
+    "9BCA31",
+    "FE4300",
+    "2E8A57",
+    "D9A420",
+    "D3681E",
+    "609E9E",
+    "1E90FF",
+    "FF69B2",
+    "8A2BE1",
+]
 
 
 def get_current_time() -> str:

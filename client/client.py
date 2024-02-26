@@ -9,7 +9,7 @@ import zmq
 
 
 class Client:
-    def __init__(self, ip: str, port: str, timeout: int = 2000) -> None:
+    def __init__(self, ip: str, port: int, timeout: int = 2000) -> None:
         self.server_address = f"tcp://{ip}:{port}"
         self.timeout = timeout
         self.context = zmq.Context()
@@ -24,15 +24,15 @@ class Client:
             response = self.socket.recv().decode("utf-8")
             return json.loads(response)
         except zmq.Again:
-            self.reinitialize_socket()
+            self._reinitialize_socket()
             return {"status": "error", "message": "Request timed out"}        
         except json.JSONDecodeError:
             return {"status": "error", "message": "Invalid response format"}
         except zmq.error.ZMQError:
-            self.reinitialize_socket()
+            self._reinitialize_socket()
             return {"status": "error", "message": "Operation cannot be accomplished in current state"}
     
-    def reinitialize_socket(self):
+    def _reinitialize_socket(self):
         """Close the existing socket and reinitialize it."""
         self.socket.close()
         self.socket = self.context.socket(zmq.REQ)
@@ -50,7 +50,7 @@ class Client:
     def send_chat(self, user_id, session_id, message):
         request = {
             "user_id": user_id,
-            "action": "write_message",
+            "action": "send_message",
             "params": {"user_id": user_id, "session_id": session_id, "message": message},
         }
         return self.send_request(request)

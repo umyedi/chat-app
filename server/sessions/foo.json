@@ -1,18 +1,25 @@
 {
-    "users": [
-        ["USERNAME", "USER-ID"],
-        ["USERNAME", "USER-ID"],
-        ["USERNAME", "USER-ID"]
-    ],
+    "users": {
+        "__user_id__": {
+            "username": "",
+            "color": "",
+            "last-active": 0
+        }
+    },
     "game": {
-        "type": "rps",
-        "status": "STATUS",
+        "name": "",
+        "host": "",
+        "status": "",
+        "current_round": 0,
+        "players": [],
         "actions": []
     },
     "chat_history": {
-        "TIMESTAMP": {
-            "username": "USERNAME",
-            "content": "CONTENT"
+        "__timestamp__": {
+            "username": "",
+            "content": "",
+            "public": true,
+            "viewers": []
         }
     }
 }
