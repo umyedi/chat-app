@@ -36,7 +36,6 @@ Pour ce sujet libre, nous avons choisit de réaliser un chatbot. On pourra envoy
 ### Arborescence
 
 ```bash
-.
 ├── client/                      # Contient les fichiers relatifs à la partie cliente de l'application
 │   ├── application.py           # Point d'entrée de l'application client, gère l'interface utilisateur
 │   ├── client.py                # Gère la logique de connexion et la communication avec le serveur
@@ -58,12 +57,11 @@ Pour ce sujet libre, nous avons choisit de réaliser un chatbot. On pourra envoy
 │   └── utils.py                 # Fonctions utilitaires communes à tous les fichiers du server
 ├── README.md                    # Documentation du repository
 └── requirements.txt             # Liste toutes les dépendances Python (pip) nécessaires pour exécuter l'application
-
 ```
 
 ### Classes
 
-![alt text](ressources/schema.png)
+![alt text](/ressources/schema.png)
 
 ## Installation Windows
 
@@ -87,7 +85,7 @@ python -m venv .venv
 #### Activation de l'environnement virtuel
 
 ```bash
-source .venv\Scripts\activate.bat
+.venv\Scripts\activate.bat
 ```
 
 On peut désormais installer les packages requis avec la commande suivante :

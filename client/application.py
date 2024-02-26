@@ -3,23 +3,31 @@
 Ce fichier gère l'interface du projet avec le module PySide6.
 
 TODO:
-    - (FIX) Add a thread when the image is downloading
     - Add a command /ask [prompt] to ask something to a bot
     - Implement the mini games
-    - Make a doc (+ class schema)
     - Clean the code
-    - Create an installer
 """
 
+import re
 import sys
 import html
 import requests
+import markdown
 from client import Client
 from worker import Worker
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QListWidgetItem, QLabel, QCompleter
-from PySide6.QtCore import Qt, QEvent, QSize, QStringListModel, QThread
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QMessageBox,
+    QListWidgetItem,
+    QLabel,
+    QCompleter,
+    QDialog,
+    QScrollArea,
+)
+from PySide6.QtCore import Qt, QEvent, QSize, QStringListModel, QThread, QFile
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtGui import QColor, QFontMetrics, QPixmap
+from PySide6.QtGui import QColor, QFontMetrics, QPixmap, QIcon
 
 
 class MainWindow(QMainWindow):
@@ -28,7 +36,9 @@ class MainWindow(QMainWindow):
 
         self.thread = QThread()  # Manage the worker to do multithreading
         self.loader = QUiLoader()  # Allows to import .ui files
-        self.client = Client("localhost", 5555)  # Creates a client to talk with the server
+
+        self.ip, self.port = "localhost", 5555
+        self.client = Client(self.ip, self.port)  # Creates a client to talk with the server
 
         self.user_id = None
         self.session_id = None
@@ -82,6 +92,7 @@ class MainWindow(QMainWindow):
         This method loads the UI layout from a file, sets up the central widget, and initializes UI components like the completer and icon sizes.
         """
         self.window = self.loader.load("../design/application.ui", self)  # Loads UI file
+        self.window.setWindowIcon(QIcon("../ressources/icon.ico"))
         self.setCentralWidget(self.window)
 
         self.completer = QCompleter()
@@ -98,13 +109,48 @@ class MainWindow(QMainWindow):
         self.window.le_chat_input.setCompleter(self.completer)
         self.window.le_chat_input.textChanged.connect(self.on_text_changed)
         self.window.le_chat_input.returnPressed.connect(self.send_chat)  # When enter key is pressed
+        self.window.pb_send.clicked.connect(self.send_chat)
         self.window.pb_game.clicked.connect(self.join_game)
+
+        self.window.action_server.triggered.connect(self.open_server_dialog)
+        self.window.action_documentation.triggered.connect(self.open_doc_dialog)
+
+    def is_ip(self, string):
+
+        if string == "localhost":
+            return True
+
+        string = string.split(".")
+        if len(string) != 4:
+            return False
+
+        for byte in string:
+            if not byte.isdigit():
+                return False
+            elif not (0 <= int(byte) <= 255):
+                return False
+        return True
+
+    def open_server_dialog(self):
+        dialog = ServerDialog(self)
+        if dialog.window.exec() == QDialog.Accepted:
+            self.ip = dialog.window.le_ip.text()
+            self.port = dialog.window.le_port.text()
+            if self.is_ip(self.ip) and self.port.isdigit():
+                self.client = Client(self.ip, int(self.port))
+            else:
+                QMessageBox.critical(self, "Error", "The ip or the port are not valid.")
+
+    def open_doc_dialog(self):
+        dialog = DocumentationDialog(self)
+        dialog.window.exec()
 
     def button_style_join(self):
         self.window.pb_game.setText("Leave")
         self.window.pb_game.setStyleSheet("background-color: #ff0021")
         self.window.le_username.setEnabled(False)
         self.window.le_room_id.setEnabled(False)
+        self.window.action_server.setEnabled(False)
 
         self.window.pb_game.clicked.disconnect()
         self.window.pb_game.clicked.connect(self.leave_game)
@@ -114,6 +160,7 @@ class MainWindow(QMainWindow):
         self.window.pb_game.setStyleSheet("background-color: #5cdb5c")
         self.window.le_username.setEnabled(True)
         self.window.le_room_id.setEnabled(True)
+        self.window.action_server.setEnabled(True)
 
         self.window.pb_game.clicked.disconnect()
         self.window.pb_game.clicked.connect(self.join_game)
@@ -212,6 +259,9 @@ class MainWindow(QMainWindow):
             username, color = user["username"], user["color"]
             self.color_table[username] = color
             item = QListWidgetItem(username)
+            font = item.font()
+            font.setBold(True)
+            item.setFont(font)
             item.setForeground(QColor(f"#{color}"))
             self.window.lw_users.addItem(item)
 
@@ -255,6 +305,53 @@ class MainWindow(QMainWindow):
         self.stop_thread()
         event.accept()
         QApplication.quit()  # Quit the application
+
+
+class ServerDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.loader = QUiLoader()
+
+        self._init_ui()
+
+    def _init_ui(self):
+        self.window = self.loader.load("../design/server.ui", self)
+
+
+class DocumentationDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.loader = QUiLoader()
+
+        self._init_ui()
+
+    def _init_ui(self):
+        self.window = self.loader.load("../design/documentation.ui", self)
+
+        self.scroll_area = self.window.findChild(QScrollArea, "scrollArea")
+        self.label = self.scroll_area.findChild(QLabel, "label")
+
+        # Load and set the documentation text
+        text = self.load_documentation()
+        processed_text = self.process_markdown(text)
+        self.label.setText(markdown.markdown(processed_text))
+        self.label.setTextFormat(Qt.RichText)
+        self.label.setWordWrap(True)
+        self.label.setOpenExternalLinks(True)
+
+    def load_documentation(self):
+        # Load the documentation from a Markdown file
+        with open("../README.md", "r") as f:
+            return f.read()
+
+    def process_markdown(self, text: str) -> str:
+        text = re.sub(r"```[a-z]*\n", "```\n", text)  # Remove code language identifiers
+        html = markdown.markdown(text, extensions=["fenced_code"])  # Use 'fenced_code' extension for code blocks
+        html = html.replace("<pre><code>", "<pre>").replace("</code></pre>", "</pre>")  # avoid nested formatting issues
+        html = html.replace("<pre>", '<pre style="background-color:#D9D9D9;">')
+        return html
 
 
 def main():

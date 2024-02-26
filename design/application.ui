@@ -25,15 +25,30 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../ressources/ressources.qrc">
+    <normaloff>:/icons/icon.ico</normaloff>:/icons/icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="main_widget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="le_username">
+    <item row="0" column="0" rowspan="3">
+     <widget class="QListWidget" name="lw_users">
+      <property name="styleSheet">
+       <string notr="true">QListView::item:selected {
+	border: none;
+    background-color: white;
+    color: black;
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLineEdit" name="le_room_id">
       <property name="styleSheet">
        <string notr="true">padding: 3px</string>
       </property>
       <property name="placeholderText">
-       <string>Username</string>
+       <string>Room ID (ex: 123456)</string>
       </property>
      </widget>
     </item>
@@ -52,7 +67,30 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1" colspan="3">
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="le_username">
+      <property name="styleSheet">
+       <string notr="true">padding: 3px</string>
+      </property>
+      <property name="placeholderText">
+       <string>Username</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QPushButton" name="pb_send">
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Send</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="4">
      <widget class="QListWidget" name="lw_chat_history">
       <property name="font">
        <font>
@@ -70,7 +108,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="3">
+    <item row="0" column="3" colspan="2">
      <widget class="QPushButton" name="pb_game">
       <property name="styleSheet">
        <string notr="true">background-color: #5cdb5c</string>
@@ -86,29 +124,9 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
-     <widget class="QLineEdit" name="le_room_id">
-      <property name="styleSheet">
-       <string notr="true">padding: 3px</string>
-      </property>
-      <property name="placeholderText">
-       <string>Room ID (ex: 123456)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="3">
-     <widget class="QListWidget" name="lw_users">
-      <property name="styleSheet">
-       <string notr="true">QListView::item:selected {
-	border: none;
-    background-color: white;
-    color: black;
-}</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -118,9 +136,65 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="action_server"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="action_documentation"/>
+    <addaction name="actionVideo"/>
+   </widget>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_open_ai">
+   <property name="text">
+    <string>open-ai</string>
+   </property>
+  </action>
+  <action name="actionopen_ai">
+   <property name="text">
+    <string>open-ai</string>
+   </property>
+  </action>
+  <action name="action_documentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+  </action>
+  <action name="actionVideo">
+   <property name="text">
+    <string>Video</string>
+   </property>
+  </action>
+  <action name="action_openai">
+   <property name="text">
+    <string>open-ai tokens</string>
+   </property>
+  </action>
+  <action name="action_server">
+   <property name="text">
+    <string>Server tokens</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionRecent_logins">
+   <property name="text">
+    <string>Recent logins</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ressources/ressources.qrc"/>
+ </resources>
  <connections/>
 </ui>

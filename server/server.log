@@ -274,3 +274,19 @@
 [2024-02-26 18:03:43] INFO:filters.py:36:The user {'username': 'User', 'color': 'FE7E4F', 'last-active': 1708967244} has been removed from sessions/000001.json.
 [2024-02-26 18:04:31] INFO:_client.py:1026:HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
 [2024-02-26 18:24:14] INFO:server.py:104:Server stopped by KeyboardInterrupt
+[2024-02-26 21:06:21] INFO:server.py:86:Server started
+[2024-02-26 21:06:32] INFO:filters.py:36:The user {'username': 'User', 'color': '609E9E', 'last-active': 1708970746} has been removed from sessions/000001.json.
+[2024-02-26 21:10:38] INFO:filters.py:36:The user {'username': 'User01', 'color': '028002', 'last-active': 1708981808} has been removed from sessions/000001.json.
+[2024-02-26 21:11:33] INFO:filters.py:36:The user {'username': 'User00', 'color': 'FE4300', 'last-active': 1708981849} has been removed from sessions/000001.json.
+[2024-02-26 21:12:17] INFO:filters.py:36:The user {'username': 'User00', 'color': '9BCA31', 'last-active': 1708981926} has been removed from sessions/000001.json.
+[2024-02-26 21:16:05] INFO:filters.py:36:The user {'username': 'User00', 'color': '0000FE', 'last-active': 1708982135} has been removed from sessions/000001.json.
+[2024-02-26 21:16:05] ERROR:server.py:60:The user id provided doesn't match.
+[2024-02-26 21:26:54] INFO:filters.py:36:The user {'username': 'user', 'color': 'FF69B2', 'last-active': 1708982538} has been removed from sessions/000001.json.
+[2024-02-26 21:27:33] INFO:_client.py:1026:HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+[2024-02-26 21:45:28] INFO:filters.py:36:The user {'username': 'username', 'color': '028002', 'last-active': 1708982945} has been removed from sessions/000001.json.
+[2024-02-26 21:55:44] INFO:filters.py:36:The user {'username': 'User00', 'color': 'FE7E4F', 'last-active': 1708983971} has been removed from sessions/000001.json.
+[2024-02-26 23:43:41] INFO:server.py:86:Server started
+[2024-02-26 23:43:44] INFO:filters.py:36:The user {'username': 'User', 'color': 'D3681E', 'last-active': 1708984555} has been removed from sessions/000001.json.
+[2024-02-26 23:45:45] INFO:filters.py:36:The user {'username': 'HelloWorld', 'color': 'D3681E', 'last-active': 1708991039} has been removed from sessions/000001.json.
+[2024-02-26 23:45:45] ERROR:server.py:60:The user name must be between 3 and 18 characters long.
+[2024-02-26 23:47:20] INFO:filters.py:36:The user {'username': 'Hi_', 'color': 'FE4300', 'last-active': 1708991160} has been removed from sessions/000001.json.

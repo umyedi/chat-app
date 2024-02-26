@@ -6,7 +6,6 @@ from datetime import datetime
 from random import randint
 
 
-
 # Global variables
 COLORS = [
     "FE0000",

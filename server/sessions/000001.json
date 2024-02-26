@@ -1,9 +1,9 @@
 {
     "users": {
-        "190818": {
-            "username": "User",
-            "color": "609E9E",
-            "last-active": 1708970746
+        "180361": {
+            "username": "Hi_",
+            "color": "0000FE",
+            "last-active": 1708991262
         }
     },
     "game": {
@@ -15,27 +15,17 @@
         "actions": []
     },
     "chat_history": {
-        "02/26/24-18:03:46.271211": {
-            "username": "User",
-            "content": "hi!",
+        "02/26/24-23:47:24.888869": {
+            "username": "Hi_",
+            "content": "hello",
             "public": true,
             "viewers": []
         },
-        "02/26/24-18:04:03.216151": {
-            "username": "system",
-            "public": false,
-            "content": "Wait for the image to generate...",
-            "viewers": [
-                "User"
-            ]
-        },
-        "02/26/24-18:04:31.074201": {
-            "username": "system",
-            "public": false,
-            "content": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Z9aYffUclBsssCr6fIuOOnLv/user-LecN7spOR9wEexQNG1uhtiNI/img-nFBrKHFFJ3EtLUkM46KsEgRX.png?st=2024-02-26T16%3A04%3A30Z&se=2024-02-26T18%3A04%3A30Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-02-26T08%3A56%3A18Z&ske=2024-02-27T08%3A56%3A18Z&sks=b&skv=2021-08-06&sig=lN7wMk5exWvW3xXxSw3NjtPw%2B/Q5BMd/LKbQjzFheuU%3D",
-            "viewers": [
-                "User"
-            ]
+        "02/26/24-23:47:38.767962": {
+            "username": "Hi_",
+            "content": "how are you guys?",
+            "public": true,
+            "viewers": []
         }
     }
 }

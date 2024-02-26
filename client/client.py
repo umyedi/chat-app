@@ -24,21 +24,27 @@ class Client:
             response = self.socket.recv().decode("utf-8")
             return json.loads(response)
         except zmq.Again:
-            self._reinitialize_socket()
+            self.reinitialize_socket()
             return {"status": "error", "message": "Request timed out"}        
         except json.JSONDecodeError:
             return {"status": "error", "message": "Invalid response format"}
         except zmq.error.ZMQError:
-            self._reinitialize_socket()
+            self.reinitialize_socket()
             return {"status": "error", "message": "Operation cannot be accomplished in current state"}
     
-    def _reinitialize_socket(self):
+    def reinitialize_socket(self, ip: str = None, port: int = None):
         """Close the existing socket and reinitialize it."""
+        if ip and port:
+            self.server_address = f"tcp://{ip}:{port}"
         self.socket.close()
         self.socket = self.context.socket(zmq.REQ)
         self.socket.setsockopt(zmq.RCVTIMEO, self.timeout)
         self.socket.connect(self.server_address)
     
+    def change_credentials(self, ip: str, port: int):
+        self.socket.close()
+        self.server_address = f"tcp://{ip}:{port}"
+
     def join_game(self, session_id, username):
         request = {"action": "join_session", "params": {"session_id": session_id, "username": username}}
         return self.send_request(request)
