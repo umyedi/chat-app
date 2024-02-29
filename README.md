@@ -2,7 +2,7 @@
 
 ## Aperçu
 
-Pour ce sujet libre, nous avons choisit de réaliser un chatbot. On pourra envoyer et recevoir des messages avec des utilisateurs ou des bots avec qui on pourra jouer à des jeux simples comme Pierre-Feuille-Ciseaux.
+Pour ce sujet libre, nous avons choisit de réaliser un système de chat en ligne. On pourra envoyer et recevoir des messages avec des utilisateurs et on aura une liste de commande utilisables pour exécuter des actions dans le chat.
 
 ## Consignes
 
