@@ -93,7 +93,7 @@ Voici la représentation des liens entre les différentes classes du projet.
 
 Ce projet gère des relations client/serveur avec le module `zmq`, il est donc impératif de vérifier qu'il n'y ait pas d'antivirus bloquant les connexions sortantes/entrantes de l'application. L'antivirus par défaut de Windows ne bloquera normalement pas le programme.
 
-Pour simplement utiliser l'application client, vous pouvez ouvrir l'exécutable [main.exe](output/main/main.exe) généré avec le package `auto-py-to-exe`.
+Pour simplement utiliser l'application client, vous pouvez ouvrir l'exécutable [main.exe](output/main/main.exe) généré avec le package `auto-py-to-exe`. Par défaut, Windows le considèrera comme un fichier malveillant ce qui n'est pas le cas. Vous pouvez aussi générer par vous-même l'exécutable en utilisant `auto-py-to-exe` et en y incluant les dossiers `design`, `fonts`, `images` et `ressources`.
 
 Pour interpréter le code, suivez les étapes suivantes. Vous pouvez vous aider de la vidéo « [Configuration de l'environnement virtuel](https://youtu.be/Fv3_tDsTktM?si=W1k5NubJR_rJmr8o) ».
 
