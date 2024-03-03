@@ -43,6 +43,7 @@ class Client(QThread):
         self.socket.connect(self.address)
 
     def run(self):
+        self.is_running = True
         while self.is_running:
             try:
                 message = self.socket.recv()
