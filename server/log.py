@@ -17,7 +17,7 @@ stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setLevel(level)
 stdout_handler.setFormatter(formatter)
 
-file_handler = logging.FileHandler("server.log")
+file_handler = logging.FileHandler("data/server.log")
 file_handler.setLevel(level)
 file_handler.setFormatter(formatter)
 

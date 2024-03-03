@@ -1,179 +1,137 @@
-from utils import *
-from api.api_manager import generate_image
+from user import User
+from message import Message
+from chatroom import ChatRoom
+from games import Game, RockPaperScissors
+from api.api import generate_image
+
 import threading
+from datetime import datetime
 
-class Commands:
-    def __init__(self, username: str, database_path: Path) -> None:
 
-        self.database_path = database_path
-        self.data = read_json(database_path)
+class CommandsHandler:
+    def __init__(self, server, user: User, chat_room: ChatRoom, command: str, arguments: list[str] = None) -> None:
 
-        self.username = username
-        self.usernames = [user["username"] for user in self.data["users"].values()]
+        self.server = server  # Server instance
+        self.user = user
+        self.chat_room = chat_room
+        self.command = command
+        self.arguments = arguments
 
-        self.commands_list = {
+        self.default_user = self.chat_room.default_user
+
+        self.command_map = {
             "/help": self.help,
             "/time": self.time,
-            "/image": self.image,
+            "/users": self.users,
             "/games": self.games,
+            "/image": self.image,
             "/invite": self.invite,
-            "/accept": self.accept,
+            "/start": self.start,
             "/play": self.play,
         }
 
-        self.commands_description = {
+        self.commands = {
             "/help": "List all the commands.",
             "/time": "Displays current time.",
-            "/image [prompt]": "Generate an image with DALL-E.",
+            "/users": "List the connected users.",
             "/games": "Displays the games available",
+            "/image [prompt]": "Generate an image with DALL-E.",
             "/invite [game] [username]": "Invite a user to play a game.",
+            "/start": "Start the selected game.",
+            "/play [action]": "Play an action in the current game."
         }
 
-        self.games_description = {"rps": "Rock Paper Scissors."}
+        self.games_map = {"rps": RockPaperScissors}
 
-    def is_command(self, command: str) -> bool:
-        return command[0] == "/"
+        self.games = {"rps": "Rock Paper Scissors"}
 
-    def execute_command(self, command: str) -> None:
-        command = command.split()
-        args = command[1:]
-        command = command[0]
+    def _get_user_from_username(self, username: str) -> User:
+        for usr in self.chat_room.users:
+            if usr.username == username:
+                return usr
+        return None
 
-        if command not in self.commands_list:
-            self.data["chat_history"][get_current_time()] = self._format_message(
-                content=f"The command '{command}' doesn't exists."
-            )
+    def execute(self):
+        function = self.command_map.get(self.command)
+        if function:
+            response = function()  # Executes the desired function
         else:
-            return_message = self.commands_list[command](*args)
-            self.data["chat_history"][get_current_time()] = return_message
+            response = f"The command '{self.command}' doesn't exist."
 
-        write_json(self.database_path, self.data)
+        if response:
+            self.server.send_message_to_client(self.user.user_id, Message(self.chat_room.default_user, response))
 
-    def _format_message(
-        self, username: str = "system", public: bool = False, content: str = None, viewers: list = None
-    ):
-        if viewers is None:
-            viewers = [self.username]
-        return {"username": username, "public": public, "content": content, "viewers": viewers}
+    def help(self):
+        return "".join(f"<br>{'&nbsp;'*4}{cmd} - {des}" for cmd, des in self.commands.items())
 
-    def help(self, *args):
-        content = "".join(
-            f"<br>{'&nbsp;'*4}{cmd} - {self.commands_description[cmd]}" for cmd in self.commands_description
-        )
-        return self._format_message(content=content)
+    def time(self):
+        return f"It's {datetime.now().strftime('%H:%M:%S')}."
 
-    def time(self, *args):
-        return self._format_message(content=f"It's {datetime.now().strftime('%I:%M %p')}.")
+    def users(self):
+        return "".join(f"<br>{'&nbsp;'*4}- <span style='color:{user.color}'>{user.username}</span>" for user in self.chat_room.users)
 
-    def _generate_image(self, prompt):
+    def games(self):
+        return "".join(f"<br>{'&nbsp;'*4}{game} - {des}" for game, des in self.games.items())
+    
+    def image(self):
+        if self.arguments:
+            prompt = " ".join(self.arguments)
+            threading.Thread(target=self._handle_image_generation, args=(self.chat_room, prompt)).start()
+            return "Wait while the image generates..."
+        return "You must provide a prompt to generate an image."
+
+    def invite(self):
+        if len(self.arguments) == 2:
+            game_name, username_invited = self.arguments
+            player_invited = self._get_user_from_username(username_invited)
+
+            if not player_invited:
+                return f"The user called '{username_invited}' cannot be found."
+
+            self.server.current_game = self.games_map[game_name](host_player=self.user)
+
+            message = Message(author=self.default_user, content=self.server.current_game.invite(player=player_invited))
+            print(f"{self.server.current_game=}")
+            self.chat_room.add_message(message)
+            self.server.distribute_message(self.chat_room, message)
+            return None
+        else:
+            return "Invalid number of arguments"
+
+    def start(self):
+        if not self.server.current_game:
+            return "You must invite players before starting a game."
+        if self.user != self.server.current_game.host_player:
+            return "You don't have the right to start the game if you haven't created it."
+
+        message = Message(author=self.default_user, content=self.server.current_game.start())
+        self.chat_room.add_message(message)
+        self.server.distribute_message(self.chat_room, message)
+        return None
+
+    def play(self):
+        if len(self.arguments) != 1:
+            return "Invalid number of arguments"
+
+        if not self.server.current_game:
+            return "You must start a game before playing."
+
+        if not self.user in self.server.current_game.players:
+            return "You are not in the game."
+
+        output = self.server.current_game.play(self.user, action=self.arguments[0])
+
+        self.server.send_message_to_client(self.user.user_id, Message(self.default_user, output))
+
+        if self.server.current_game.check_win():
+            win_message = Message(self.default_user, self.server.current_game.check_win())
+            self.chat_room.add_message(win_message)
+            self.server.distribute_message(self.chat_room, win_message)
+            self.server.current_game = None
+        return None
+
+    def _handle_image_generation(self, chat_room_id, prompt):
         url = generate_image(prompt)
-        data = read_json(self.database_path)
-        data["chat_history"][get_current_time()] = self._format_message(content=url)
-        write_json(self.database_path, data)
-
-    def image(self, *args):
-        if not args:
-            return self._format_message(content="Invalid number of options. You should run '/image [prompt]'.")
-
-        prompt = " ".join(str(word) for word in args)
-
-        download_thread = threading.Thread(target=self._generate_image, args=(prompt,)) # 
-        download_thread.start()
-
-        return self._format_message(content="Wait for the image to generate...")
-
-    def games(self, *args):
-        content = "".join(f"<br>{'&nbsp;'*4}{game} - {self.games_description[game]}" for game in self.games_description)
-        return self._format_message(content=content)
-
-    def _update_game(self, name: str, status: str, players: list[str], actions: list[str] = None):
-        if actions is None:
-            actions = []
-        self.data["game"] = {
-            "name": name,
-            "host": self.username,
-            "status": status,
-            "current_round": 0,
-            "players": players,
-            "actions": actions,
-        }
-
-    def invite(self, *args):
-
-        if len(args) != 2:
-            return self._format_message(content="Invalid number of options. You should run '/invite [game] [user]'.")
-
-        game = args[0]
-        opponent = args[1]
-
-        if game not in self.games_description:
-            content = f"The game '{game}' doesn't exists. Run '/games' to see the list of the games available."
-            return self._format_message(content=content)
-        if opponent not in self.usernames:
-            return self._format_message(content=f"The user '{opponent}' isn't connected.")
-        if self.data["game"]["status"] == "running":
-            content = f"The game {self.data['game']['name']} is still running. The host of the game should run '/end {self.data['game']['name']}' to end the game."
-            return self._format_message(content=content)
-
-        self._update_game(name=game, status="waiting", players=[opponent])
-
-        content = f"{self.username} invites {opponent} to play Rock Paper Scissors. Run '/accept {self.username}' to accept the invitation."
-        return self._format_message(public=True, content=content)
-
-    def accept(self, *args):
-        if len(args) != 1:
-            return self._format_message(content="Invalid number of options. You should run '/accept [user]'.")
-
-        host_player = args[0]
-
-        if host_player not in self.usernames:
-            return self._format_message(content=f"The user '{host_player}' isn't connected.")
-
-        invited_players = self.data["game"]["players"]
-
-        if len(invited_players) != 1:
-            return self._format_message(content=f"The number of users invited ({len(invited_players)}) is invalid.")
-
-        if self.username != invited_players[0]:
-            return self._format_message(content="You are not the one invited to play.")
-
-        if host_player != self.data["game"]["host"]:
-            return self._format_message(content=f"The player '{host_player}' has not started a game.")
-
-        self.data["game"]["status"] = "running"
-        return self._format_message(
-            public=True,
-            content=f"The game {self.data['game']['name']} has started. Run /play [action] (rock, paper or scissors).",
-        )
-
-    def _play_rps(self, action: str):
-
-        current_round = self.data["game"]["current_round"]
-
-        if len(self.data["game"]["actions"]) < current_round + 1:
-            self.data["game"]["actions"].append(
-                {self.data["game"]["host"]: None, self.data["game"]["players"][0]: None, "winner": None}
-            )
-
-        self.data["game"]["actions"][current_round][self.username] = action
-        return self._format_message(
-            content=f"You played {action}. Waiting for {self.data['game']['players'][0]} to play."
-        )
-
-    def play(self, *args):
-
-        if len(args) != 1:
-            return self._format_message(content="Invalid number of options. You should run '/play [action]'.")
-
-        game = self.data["game"]
-        # Rock Paper Scissors
-        if (
-            game["name"] == "rps"
-            and game["status"] == "running"
-            and self.username
-            in [
-                game["host"],
-                game["players"][0],
-            ]
-        ):
-            return self._play_rps(args[0])
+        message = Message(self.default_user, url)
+        self.chat_room.add_message(message)
+        self.server.distribute_message(chat_room_id, message)

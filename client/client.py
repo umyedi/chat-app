@@ -1,62 +1,69 @@
-"""
-
-Ce fichier gère le code coté client.
-
-"""
-
-import json
 import zmq
+import traceback
+from PySide6.QtCore import QThread, Signal
 
 
-class Client:
-    def __init__(self, ip: str, port: int, timeout: int = 2000) -> None:
-        self.server_address = f"tcp://{ip}:{port}"
-        self.timeout = timeout
+class Client(QThread):
+    received_message = Signal(str)
+
+    def __init__(self, ip: str = "127.0.0.1", port: str = "5555"):
+        super().__init__()
+        self.address = None
+        self.context = None
+        self.socket = None
+        self.is_running = False
+        self._set_address_and_connect(ip, port)
+
+    def _set_address_and_connect(self, ip: str, port: str):
+        if self._set_address(ip, port):
+            self._initialize_socket()
+
+    def _set_address(self, ip: str, port: str):
+        string = ip.split(".")
+        if len(string) != 4:
+            return False
+        for byte in string:
+            if not byte.isdigit():
+                return False
+            elif not (0 <= int(byte) <= 255):
+                return False
+        if not port.isdigit():
+            return False
+
+        self.address = f"tcp://{ip}:{port}"
+        return True
+
+    def _initialize_socket(self):
+        if self.context is not None:
+            self.context.term()
         self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.REQ)
-        self.socket.setsockopt(zmq.RCVTIMEO, self.timeout)
-        self.socket.connect(self.server_address)
+        if self.socket is not None:
+            self.socket.close()
+        self.socket = self.context.socket(zmq.DEALER)
+        self.socket.connect(self.address)
 
-    def send_request(self, request: dict):
+    def run(self):
+        while self.is_running:
+            try:
+                message = self.socket.recv()
+                self.received_message.emit(message.decode())
+            except zmq.Again:  # No message received, sleep briefly to yield execution and reduce CPU usage
+                self.sleep(1)
+            except zmq.ContextTerminated:  # Catches the termination of the context and exits the loop
+                break
+            except zmq.ZMQError as e:
+                print(f"Error: {e}")
+                print(f"Traceback: {traceback.format_exc()}")
 
-        try:
-            self.socket.send(json.dumps(request).encode("utf-8"))
-            response = self.socket.recv().decode("utf-8")
-            return json.loads(response)
-        except zmq.Again:
-            self.reinitialize_socket()
-            return {"status": "error", "message": "Request timed out"}        
-        except json.JSONDecodeError:
-            return {"status": "error", "message": "Invalid response format"}
-        except zmq.error.ZMQError:
-            self.reinitialize_socket()
-            return {"status": "error", "message": "Operation cannot be accomplished in current state"}
-    
-    def reinitialize_socket(self, ip: str = None, port: int = None):
-        """Close the existing socket and reinitialize it."""
-        if ip and port:
-            self.server_address = f"tcp://{ip}:{port}"
-        self.socket.close()
-        self.socket = self.context.socket(zmq.REQ)
-        self.socket.setsockopt(zmq.RCVTIMEO, self.timeout)
-        self.socket.connect(self.server_address)
-    
-    def change_credentials(self, ip: str, port: int):
-        self.socket.close()
-        self.server_address = f"tcp://{ip}:{port}"
+    def restart(self, new_ip: str, new_port: str):
+        self.is_running = False  # Stop the current listening loop
+        self.socket.close()  # Close the current socket
+        self.context.term()  # Terminate the current context
+        self._set_address_and_connect(new_ip, new_port)  # Set the new address and connect
+        self.start()  # Restart the listening thread
 
-    def join_game(self, session_id, username):
-        request = {"action": "join_session", "params": {"session_id": session_id, "username": username}}
-        return self.send_request(request)
-
-    def get_game_status(self, session_id, user_id):
-        request = {"action": "get_session_status", "params": {"user_id": user_id, "session_id": session_id}}
-        return self.send_request(request)
-
-    def send_chat(self, user_id, session_id, message):
-        request = {
-            "user_id": user_id,
-            "action": "send_message",
-            "params": {"user_id": user_id, "session_id": session_id, "message": message},
-        }
-        return self.send_request(request)
+    def stop(self):
+        self.is_running = False
+        self.socket.close()  # Close the ZMQ socket
+        self.context.term()  # Terminate the ZMQ context
+        self.wait()  # Wait for the thread to finish

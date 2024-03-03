@@ -8,8 +8,9 @@ h11==0.14.0
 httpcore==1.0.4
 httpx==0.27.0
 idna==3.6
-openai==1.12.0
-pydantic==2.6.2
+Markdown==3.5.2
+openai==1.13.3
+pydantic==2.6.3
 pydantic_core==2.16.3
 PySide6==6.6.2
 PySide6_Addons==6.6.2

@@ -1,109 +1,129 @@
-"""
-
-Ce fichier gère le code coté serveur.
-
-"""
-
-from actions import Actions
-from filters import Filters
+from user import User
+from message import Message
+from chatroom import ChatRoom
+from commands import CommandsHandler
+from games import Game
 from log import logger
-import sys
-import json
+
 import zmq
+import json
+import traceback
+from threading import Thread
 
 
 class Server:
-    def __init__(self, port: int = 5555) -> None:
+    def __init__(self, ip: str = "127.0.0.1", port: str = "5555"):
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.ROUTER)
 
-        self.socket = zmq.Context().socket(zmq.REP)
-        self.socket.bind(f"tcp://*:{port}")
+        self.ip = ip
+        self.port = port
+        self.address = f"tcp://{self.ip}:{self.port}"
 
-        self.filters = Filters()
+        self.chat_rooms = []
+        self.users = []
+        self.current_game = Game()
 
-    def _format_response(self, status: str = "success", message: str = "", data: dict = None) -> bytes:
-        """Format the response to be sent back to the client.
+    def start(self):
+        self.socket.bind(self.address)
+        logger.info(f"Server started at {self.address}")
+        self.thread = Thread(target=self.listener)
+        self.thread.start()
 
-        Args:
-            status (str, optional): Status of the response ('success' or 'error'). Defaults to "success".
-            message (str, optional): Reponse message to be sent to the client. Defaults to None.
-            data (dict, optional): Data to be sent to the client. Defaults to None.
+    def _get_user(self, user_id: bytes) -> User | None:
+        for usr in self.users:
+            if usr.user_id == user_id:
+                return usr
+        return None
 
-        Returns:
-            bytes: Formatted response
-        """
-        response = {"status": status, "message": message}
-        if data is not None:
-            response["data"] = data
-        return json.dumps(response).encode("utf-8")
+    def _get_chat_room(self, chat_room_id: str) -> ChatRoom | None:
+        for chat_room in self.chat_rooms:
+            if chat_room.chat_room_id == chat_room_id:
+                return chat_room
+        return None
 
-    def _process_request(self, client_message: str) -> dict:
-        """Check the client message validity and return the data the client asked for.
-
-        Args:
-            client_message (str): message of the client
-
-        Returns:
-            dict: result of the client request
-        """
-        try:
-            request = json.loads(client_message)
-            logger.debug(request)
-
-            action = request.get("action")
-            params = request.get("params", {})
-            self.filters.remove_inactive_users(params["session_id"])
-            return self._handle_action(action, params)
-        except json.JSONDecodeError as e:
-            logger.error(f"JSON decode error: {str(e)}")
-            return self._format_response(status="error", message="Invalid JSON format")
-        except ValueError as e:
-            logger.error(f"{str(e)}")
-            return self._format_response(status="error", message=str(e))
-        except KeyError as e:
-            logger.error(f"Missing parameter: {str(e)}")
-            return self._format_response(status="error", message=f"Missing parameter: {e}")
-
-    def _handle_action(self, action: str, params: dict) -> dict:
-        """Runs the action provided with the provided parameters.
-
-        Args:
-            action (str): keyword corresponding to an action
-            params (dict): parameters needed for this action
-
-        Returns:
-            dict: result of the action
-        """
-        actionHandler = Actions(params["session_id"])
-        if actionHandler.exists(action):
-            data = actionHandler.execute(action, params)
-            return self._format_response(data=data)
-        else:
-            return self._format_response(status="error", message="Action not found")
-
-    def run(self) -> None:
-        """Runs a while loop that scans for clients messages."""
-
-        logger.info("Server started")
+    def listener(self):
         while True:
             try:
-                client_message = self.socket.recv().decode("utf-8")
-                response = self._process_request(client_message)
-                self.socket.send(response)
-                logger.debug(response)
-            except Exception as e:
-                logger.error(str(e))
-                self.socket.send(self._format_response(status="error", message="An unexpected error occurred"))
+                client_id, query = self.socket.recv_multipart()
+                query = json.loads(query.decode())
+                action = query.get("action")
 
+                match action:
+                    case "join":
+                        self._handle_join(client_id, query)
+                    case "message":
+                        self._handle_message(client_id, query)
+            except Exception:
+                logger.error(traceback.format_exc())
 
+    def _handle_join(self, client_id, message_data):
+        # Creates a new user for the client if he hasn't one yet
+        if not self._get_user(client_id):
+            user = User(user_id=client_id)
+            user.set_config(message_data["user"])
+            user.set_random_color()
+            self.users.append(user)
+        else:
+            user = self._get_user(client_id)
+            if user.username != message_data["user"]["username"]:
+                user.username = message_data["user"]["username"]
 
+        # Creates a new chat rooms if it doesn't already exists
+        if not self._get_chat_room(message_data["room_id"]):
+            chat_room = ChatRoom(message_data["room_id"])
+            self.chat_rooms.append(chat_room)
+        else:
+            chat_room = self._get_chat_room(message_data["room_id"])
 
-def main():
-    try:
-        Server().run()
-    except KeyboardInterrupt:
-        logger.info("Server stopped by KeyboardInterrupt")
-        sys.exit(130)
+        chat_room.add_user(user)
+        welcome_message = Message(
+            chat_room.default_user,
+            f"The user <b><span style='color:{user.color}'>{user.username}</span><b> has joined the chat!",
+        )
+        chat_room.add_message(welcome_message)
+        self.distribute_message(chat_room, welcome_message)
+        logger.info(f"User {user} joined chat room {chat_room.chat_room_id}")
 
+    def _handle_message(self, client_id, message_data):
 
-if __name__ == "__main__":
-    main()
+        chat_room = self._get_chat_room(message_data["room_id"])
+        if not chat_room:
+            raise ValueError(f"The chat room {message_data['room_id']} doesn't exists.")
+
+        content = message_data["content"]
+        user = self._get_user(client_id)
+
+        if user not in chat_room.users:
+            raise ValueError(f"The user {user} is not in the chat room {chat_room}")
+
+        if content.startswith("/"):  # If the message is a command
+            command, *arguments = content.split()
+            command_handler = CommandsHandler(self, user, chat_room, command, arguments)
+            command_handler.execute()
+        else:
+            message = Message(author=user, content=content)
+            self.distribute_message(chat_room, message)
+            chat_room.add_message(message)
+
+        logger.info(f"Message from {user} in room {chat_room.chat_room_id}: {content}")
+
+    def send_message_to_client(self, client_id, message):
+        message_content = json.dumps(
+            {"author": {"username": message.author.username, "color": message.author.color}, "content": message.content}
+        ).encode("utf-8")
+        self.socket.send_multipart([client_id, message_content])
+
+    def distribute_message(self, chat_room: ChatRoom, message: Message):
+        message_content = json.dumps(
+            {
+                "author": {"username": message.author.username, "color": message.author.color},
+                "content": message.content,
+                "room_id": chat_room.chat_room_id,
+            }
+        ).encode("utf-8")
+
+        for user in chat_room.users:
+            client_id = user.user_id
+            if client_id:
+                self.socket.send_multipart([client_id, message_content])

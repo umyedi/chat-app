@@ -2,7 +2,7 @@ from openai import OpenAI
 import json
 from os.path import dirname, abspath, join
 
-with open(join(dirname(abspath(__file__)), "keys.json"), "r") as f:
+with open(join(dirname(abspath(__file__)), "credentials.json"), "r") as f:
     KEYS = json.load(f)
 
 openai_client = OpenAI(api_key=KEYS["open-ai"]["api-key"])
