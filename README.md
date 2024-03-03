@@ -2,7 +2,7 @@
 
 ## Aperçu
 
-Pour ce sujet libre, nous avons choisit de réaliser un système de chat en ligne. On pourra envoyer et recevoir des messages avec des utilisateurs et on aura une liste de commande utilisables pour exécuter des actions dans le chat.
+Chat-app est une application Python qui permet d'envoyer et de recevoir des messages. Le client peut envoyer des messages dans des salons de chat dans lesquels il peut entrer des commandes qui permettent de lister les utilisateurs, de générer une image avec DALL-E, de joue à des jeux simples...
 
 ## Consignes
 
@@ -56,10 +56,14 @@ Pour ce sujet libre, nous avons choisit de réaliser un système de chat en lign
 │   ├── main.py                      # Code exécutable pour démarrer l'application
 │   └── resources                    # Ressources graphiques de l'application
 │       └── icon.ico
+├── executable                       # Dossier de sortie du package auto-py-to-exe
+│   └── main 
+│       ├── _internal                # Fichiers externes de l'exécutable 
+│       └── main.exe                 # Application client exécutable
 ├── README.md                        # Documentation
-├── requirements.txt                 # Librairies nécessaire pour exécuter le code
+├── requirements.txt                 # Librairies nécessaires pour exécuter le code
 ├── server                           # Fichiers relatifs au serveur
-│   ├── api                          # Fichiers relatif aux APIs
+│   ├── api                          # Fichiers relatifs aux APIs
 │   │   ├── api.py                   # Contient les fonctions créees à partir des APIs
 │   │   └── credentials.json         # Contient les tokens d'API
 │   ├── chatroom.py                  # Gère les salons de chat
@@ -87,22 +91,17 @@ Voici la représentation des liens entre les différentes classes du projet.
 
 ## Installation Windows
 
-Ce projet gère des relation client/serveur avec le module `zmq`, il est donc impératif de vérifier qu'il n'y ait pas
-d'antivirus bloquant les connexion sortantes/entrantes de l'application. L'antivirus par défault de Windows ne bloquera
-normalement pas le programme.
+Ce projet gère des relations client/serveur avec le module `zmq`, il est donc impératif de vérifier qu'il n'y ait pas d'antivirus bloquant les connexions sortantes/entrantes de l'application. L'antivirus par défaut de Windows ne bloquera normalement pas le programme.
 
 Pour simplement utiliser l'application client, vous pouvez ouvrir l'exécutable [main.exe](output/main/main.exe) généré avec le package `auto-py-to-exe`.
 
 Pour interpréter le code, suivez les étapes suivantes. Vous pouvez vous aider de la vidéo « [Configuration de l'environnement virtuel](https://youtu.be/Fv3_tDsTktM?si=W1k5NubJR_rJmr8o) ».
 
-Selon les version de windows, la commande pour utiliser Python peut varier entre `py`, `python` ou `python3` donc faites en fonction de ce qui marche avec votre machine. Nous utiliserons `python` dans les instructions suivantes.
+Selon les versions de Windows, la commande pour utiliser Python peut varier entre `py`, `python` ou `python3` donc faites en fonction de ce qui marche avec votre machine. Nous utiliserons `python` dans les instructions suivantes.
 
-Vérifiez que vous avez la dernière version de Python (que vous pouvez télécharger
-[ici](https://www.python.org/downloads/)) et que pip est à jour (en exécutant `python -m pip install --upgrade pip`).
+Vérifiez que vous avez la dernière version de Python (que vous pouvez télécharger [ici](https://www.python.org/downloads/)) et que pip est à jour (en exécutant `python -m pip install --upgrade pip`).
 
-Pour contenir les packages, il est préférable de mettre en place un environnement virtuel avec Python. Cela permettera
-d'installer les packages nécessaires uniquement pour ce projet. Pour cela, ouvrez un terminal (en administrateur) dans
-le dossier source du repository et exécutez les commandes suivantes :
+Pour contenir les packages, il est préférable de mettre en place un environnement virtuel avec Python. Cela permettra d'installer les packages nécessaires uniquement pour ce projet. Pour cela, ouvrez un terminal (en administrateur) dans le dossier source du repository et exécutez les commandes suivantes :
 
 ### Création de l'environnement virtuel
 
@@ -118,7 +117,7 @@ python -m venv .venv
 
 ### Installation des packages
 
-On peut désormais installer les librairies requis avec la commande suivante :
+On peut désormais installer les librairies requises avec la commande suivante :
 
 ```bash
 pip install -r requirements.txt
@@ -140,7 +139,7 @@ cd server # Naviguer dans le dossier 'server'
 python main.py
 ```
 
-Attention, vous obtiendez surement une erreur car le fichier `credentials.json` qui contient les tokens d'API n'est pas inclus dans le repository. Vous devez générer vous même vos tokens avec l'API. Vous pourrez ainsi les intégrer dans le fichier credentials.json de la façon suivante :
+Attention, vous obtiendrez surement une erreur car le fichier `credentials.json` qui contient les tokens d'API n'est pas inclus dans le repository. Vous devez générer vous-même vos tokens avec l'API. Vous pourrez ainsi les intégrer dans le fichier credentials.json de la façon suivante :
 
 ```json
 {
@@ -156,13 +155,13 @@ Attention, vous obtiendez surement une erreur car le fichier `credentials.json` 
 
 ### Connexion au server
 
-Une fois l'application client ouverte, vous pouvez modifier les information du serveur. Par défault, le client essaye de se connecter à `127.0.0.1` sur le port `5555`. Si vous faites tourner le serveur sur votre machine, vous pouvez le laisser tel quel.
+Une fois l'application client ouverte, vous pouvez modifier les informations du serveur. Par défaut, le client essaye de se connecter à `127.0.0.1` sur le port `5555`. Si vous faites tourner le serveur sur votre machine, vous pouvez le laisser tel quel.
 
-Pour pouvoir utiliser l'application en ligne, connecter vous à l'IP `149.202.45.5` et au port `5555`. Cela peut arriver que ça ne marche pas du premier coup donc il ne faut pas hésiter à réessayer.
+Pour pouvoir utiliser l'application en ligne, connecter-vous à l'IP `149.202.45.5` et au port `5555`. Cela peut arriver que ça ne marche pas du premier coup donc il ne faut pas hésiter à réessayer.
 
 ### Rejoindre un salon
 
-Une fois que vous avez validez la nouvelle adresse du serveur, vous pouvez entre un nom d'utilisateur (ex: `User01`) et un nom de salon (ex: `general`). Vous pouvez appuyer sur `Join` et si tout se passe bien, vous devriez voir apparaitre `system: The user User01 has joined the chat!` comme sur l'image ci-dessous.
+Une fois que vous avez validé la nouvelle adresse du serveur, vous pouvez entre un nom d'utilisateur (ex: `User01`) et un nom de salon (ex: `general`). Vous pouvez appuyer sur `Join` et si tout se passe bien, vous devriez voir apparaitre `system: The user User01 has joined the chat!` comme sur l'image ci-dessous.
 
 ![Screenshot](resources/MainWindow01.png)
 
@@ -170,6 +169,6 @@ Vous avez maintenant accès au salon de chat `general` et vous pouvez exécuter 
 
 ### Commencer un jeu
 
-Admettons qu'il y ait deux utilisateurs `User01` et `User02` dans le salon `general`. Si `User01` veux jouer pierre feuille ciseaux avec `User02`, il peut taper la commande `/invite rps User02` pour l'inviter à jouer à `rps` (Rock Paper Scissors). Une fois qu'il l'a invité, il peut démarrer le jeux avec la commande `/start`. Les deux joueurs peuvent maintenant taper la commande `/play [action]` en remplaçant `[action]` par `rock`, `paper` ou `scissors`. Une fois que les deux ont joués, le résultat s'affiche et ils peuvent à nouveau rejouer.
+Admettons qu'il y ait deux utilisateurs `User01` et `User02` dans le salon `general`. Si `User01` veut jouer pierre feuille ciseaux avec `User02`, il peut taper la commande `/invite rps User02` pour l'inviter à jouer à `rps` (Rock Paper Scissors). Une fois qu'il l'a invité, il peut démarrer le jeu avec la commande `/start`. Les deux joueurs peuvent maintenant taper la commande `/play [action]` en remplaçant `[action]` par `rock`, `paper` ou `scissors`. Une fois que les deux ont joué, le résultat s'affiche et ils peuvent à nouveau rejouer.
 
 ![Screenshot](resources/game_example.png)
