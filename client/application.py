@@ -2,6 +2,7 @@ from client import Client
 from download import DownloadManager
 import dialogs
 
+import os
 import json
 import webbrowser
 
@@ -10,6 +11,9 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QEvent
 from PySide6.QtGui import QFontDatabase, QIcon
+
+
+CUR_DIR = os.path.dirname(__file__)
 
 
 class Application(QMainWindow):
@@ -32,15 +36,15 @@ class Application(QMainWindow):
 
         This method loads the UI layout from a file, sets up the central widget, and initializes UI components like the completer and icon sizes.
         """
-        self.window = self.loader.load("design/application.ui", self)  # Loads UI file
-        self.window.setWindowIcon(QIcon("resources/icon.ico"))
+        self.window = self.loader.load(os.path.join(CUR_DIR, "design", "application.ui"), self)  # Loads UI file
+        self.window.setWindowIcon(QIcon(os.path.join(CUR_DIR, "resources", "icon.ico")))
         self.setCentralWidget(self.window)
 
         self.regular_font_family = QFontDatabase.applicationFontFamilies(
-            QFontDatabase.addApplicationFont("fonts/SpaceMono-Regular.ttf")
+            QFontDatabase.addApplicationFont(os.path.join(CUR_DIR, "fonts", "SpaceMono-Regular.ttf"))
         )[0]
         self.bold_font_family = QFontDatabase.applicationFontFamilies(
-            QFontDatabase.addApplicationFont("fonts/SpaceMono-Bold.ttf")
+            QFontDatabase.addApplicationFont(os.path.join(CUR_DIR, "fonts", "SpaceMono-Bold.ttf"))
         )[0]
 
         self.bold_css = f"""font-family:"{self.bold_font_family}";font-weight:bold;"""
@@ -77,6 +81,7 @@ class Application(QMainWindow):
         if dialog.window.exec() == QDialog.Accepted:
             ip, port = dialog.window.le_ip.text(), dialog.window.le_port.text()
             self.client.restart(ip, port)
+        print(f"{self.client.address=}")
 
     def open_documentation(self):
         dialogs.Documentation(self).window.exec()

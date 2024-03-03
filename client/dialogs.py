@@ -1,9 +1,13 @@
+import os
 import re
 import markdown
 import requests
 from PySide6.QtWidgets import QDialog, QScrollArea, QLabel
 from PySide6.QtCore import Qt
 from PySide6.QtUiTools import QUiLoader
+
+
+CUR_DIR = os.path.dirname(__file__)
 
 
 class ServerTokens(QDialog):
@@ -13,7 +17,7 @@ class ServerTokens(QDialog):
         self._init_ui()
 
     def _init_ui(self):
-        self.window = self.loader.load("design/server.ui", self)
+        self.window = self.loader.load(os.path.join(CUR_DIR, "design", "server.ui"), self)
 
 
 class Documentation(QDialog):
@@ -25,7 +29,7 @@ class Documentation(QDialog):
         self._init_ui()
 
     def _init_ui(self):
-        self.window = self.loader.load("design/documentation.ui", self)
+        self.window = self.loader.load(os.path.join(CUR_DIR, "design","documentation.ui"), self)
 
         self.scroll_area = self.window.findChild(QScrollArea, "scrollArea")
         self.label = self.scroll_area.findChild(QLabel, "label")

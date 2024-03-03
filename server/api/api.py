@@ -24,7 +24,7 @@ def generate_image(prompt: str) -> str:
         size="1024x1024",
         quality="hd",
         response_format="url",
-        user=KEYS["open-ai"]["user-id"],
+        user=KEYS["open-ai"].get("user-id", None),
     )
 
     return response.data[0].url
