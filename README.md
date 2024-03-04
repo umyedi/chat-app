@@ -57,8 +57,8 @@ Chat-app est une application Python qui permet d'envoyer et de recevoir des mess
 │   └── resources                    # Ressources graphiques de l'application
 │       └── icon.ico
 ├── executable                       # Dossier de sortie du package auto-py-to-exe
-│   └── main 
-│       ├── _internal                # Fichiers externes de l'exécutable 
+│   └── main
+│       ├── _internal                # Fichiers externes de l'exécutable
 │       └── main.exe                 # Application client exécutable
 ├── README.md                        # Documentation
 ├── requirements.txt                 # Librairies nécessaires pour exécuter le code
@@ -172,3 +172,18 @@ Vous avez maintenant accès au salon de chat `general` et vous pouvez exécuter 
 Admettons qu'il y ait deux utilisateurs `User01` et `User02` dans le salon `general`. Si `User01` veut jouer pierre feuille ciseaux avec `User02`, il peut taper la commande `/invite rps User02` pour l'inviter à jouer à `rps` (Rock Paper Scissors). Une fois qu'il l'a invité, il peut démarrer le jeu avec la commande `/start`. Les deux joueurs peuvent maintenant taper la commande `/play [action]` en remplaçant `[action]` par `rock`, `paper` ou `scissors`. Une fois que les deux ont joué, le résultat s'affiche et ils peuvent à nouveau rejouer.
 
 ![Screenshot](resources/game_example.png)
+
+## Pistes d'amélioration
+
+### Client
+
+-   Ajouter (dans la toolbar de l'interface) les tokens de serveur récemment utilisés
+-   Ajouter un widget contenant la liste des utilisateurs connectés
+-   Ajouter un widget qui affiche les salons joignables
+
+### Serveur
+
+-   Supprimer les utilisateurs du salon lorsqu'ils sont déconnectés
+-   Implémenter une commande du type `/ask [prompt]` pour parler avec un chatbot généré par Chat GPT.
+-   Implémenter des nouveaux jeux (jeu du pendu, petit bac...)
+-   Mettre des filtres sur les noms d'utilisateurs pour éviter les conflit dans les invitations de jeu
