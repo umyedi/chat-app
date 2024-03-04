@@ -42,6 +42,12 @@ class Client(QThread):
         self.socket = self.context.socket(zmq.DEALER)
         self.socket.connect(self.address)
 
+    def _wait_thread_to_close(self):
+        self.is_running = False
+        self.socket.close()
+        self.context.term()
+        self.wait()
+
     def run(self):
         self.is_running = True
         while self.is_running:
@@ -49,7 +55,7 @@ class Client(QThread):
                 message = self.socket.recv()
                 self.received_message.emit(message.decode())
             except zmq.Again:  # No message received, sleep briefly to yield execution and reduce CPU usage
-                self.sleep(1)
+                QThread.sleep(1)
             except zmq.ContextTerminated:  # Catches the termination of the context and exits the loop
                 break
             except zmq.ZMQError as e:
@@ -57,14 +63,9 @@ class Client(QThread):
                 print(f"Traceback: {traceback.format_exc()}")
 
     def restart(self, new_ip: str, new_port: str):
-        self.is_running = False  # Stop the current listening loop
-        self.socket.close()  # Close the current socket
-        self.context.term()  # Terminate the current context
+        self._wait_thread_to_close()
         self._set_address_and_connect(new_ip, new_port)  # Set the new address and connect
         self.start()  # Restart the listening thread
 
     def stop(self):
-        self.is_running = False
-        self.socket.close()  # Close the ZMQ socket
-        self.context.term()  # Terminate the ZMQ context
-        self.wait()  # Wait for the thread to finish
+        self._wait_thread_to_close()
