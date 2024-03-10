@@ -90,6 +90,15 @@
       <property name="styleSheet">
        <string notr="true">padding: 3px</string>
       </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Normal</enum>
+      </property>
       <property name="placeholderText">
        <string>Enter you message here</string>
       </property>

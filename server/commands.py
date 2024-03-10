@@ -38,7 +38,7 @@ class CommandsHandler:
             "/image [prompt]": "Generate an image with DALL-E.",
             "/invite [game] [username]": "Invite a user to play a game.",
             "/start": "Start the selected game.",
-            "/play [action]": "Play an action in the current game."
+            "/play [action]": "Play an action in the current game.",
         }
 
         self.games_map = {"rps": RockPaperScissors}
@@ -46,14 +46,18 @@ class CommandsHandler:
         self.games = {"rps": "Rock Paper Scissors"}
 
     def _get_user_from_username(self, username: str) -> User:
-        for usr in self.chat_room.users:
-            if usr.username == username:
-                return usr
-        return None
+        """Returns the first user found with the username provided.
+
+        Args:
+            username (str): Username you're looking for
+
+        Returns:
+            User: User object if it was found. None otherwise.
+        """
+        return next((usr for usr in self.chat_room.users if usr.username == username), None)
 
     def execute(self):
-        function = self.command_map.get(self.command)
-        if function:
+        if function := self.command_map.get(self.command):
             response = function()  # Executes the desired function
         else:
             response = f"The command '{self.command}' doesn't exist."
@@ -68,11 +72,14 @@ class CommandsHandler:
         return f"It's {datetime.now().strftime('%H:%M:%S')}."
 
     def users(self):
-        return "".join(f"<br>{'&nbsp;'*4}- <span style='color:{user.color}'>{user.username}</span>" for user in self.chat_room.users)
+        return "".join(
+            f"<br>{'&nbsp;'*4}- <span style='color:{user.color}'>{user.username}</span>"
+            for user in self.chat_room.users
+        )
 
     def games(self):
         return "".join(f"<br>{'&nbsp;'*4}{game} - {des}" for game, des in self.games.items())
-    
+
     def image(self):
         if self.arguments:
             prompt = " ".join(self.arguments)
@@ -81,22 +88,22 @@ class CommandsHandler:
         return "You must provide a prompt to generate an image."
 
     def invite(self):
-        if len(self.arguments) == 2:
-            game_name, username_invited = self.arguments
-            player_invited = self._get_user_from_username(username_invited)
-
-            if not player_invited:
-                return f"The user called '{username_invited}' cannot be found."
-
-            self.server.current_game = self.games_map[game_name](host_player=self.user)
-
-            message = Message(author=self.default_user, content=self.server.current_game.invite(player=player_invited))
-            print(f"{self.server.current_game=}")
-            self.chat_room.add_message(message)
-            self.server.distribute_message(self.chat_room, message)
-            return None
-        else:
+        if len(self.arguments) != 2:
             return "Invalid number of arguments"
+
+        game_name, username_invited = self.arguments
+        player_invited = self._get_user_from_username(username_invited)
+
+        if not player_invited:
+            return f"The user called '{username_invited}' cannot be found."
+
+        self.server.current_game = self.games_map[game_name](host_player=self.user)
+
+        message = Message(author=self.default_user, content=self.server.current_game.invite(player=player_invited))
+        print(f"{self.server.current_game=}")
+        self.chat_room.add_message(message)
+        self.server.distribute_message(self.chat_room, message)
+        return None
 
     def start(self):
         if not self.server.current_game:
@@ -116,7 +123,7 @@ class CommandsHandler:
         if not self.server.current_game:
             return "You must start a game before playing."
 
-        if not self.user in self.server.current_game.players:
+        if self.user not in self.server.current_game.players:
             return "You are not in the game."
 
         output = self.server.current_game.play(self.user, action=self.arguments[0])

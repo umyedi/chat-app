@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ServerTokens</class>
+ <widget class="QDialog" name="ServerTokens">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Server tokens</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../ressources/ressources.qrc">
+   <iconset>
     <normaloff>:/icons/icon.ico</normaloff>:/icons/icon.ico</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,7 +26,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="le_ip">
+    <widget class="QLineEdit" name="ip_input">
      <property name="echoMode">
       <enum>QLineEdit::Normal</enum>
      </property>
@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="le_port">
+    <widget class="QLineEdit" name="port_input">
      <property name="echoMode">
       <enum>QLineEdit::Normal</enum>
      </property>
@@ -58,14 +58,12 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../ressources/ressources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>ServerTokens</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -81,7 +79,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>ServerTokens</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

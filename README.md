@@ -1,10 +1,10 @@
 # Chat-app
 
-## Aperçu
+## 🔎 Aperçu
 
 Chat-app est une application Python qui permet d'envoyer et de recevoir des messages. Le client peut envoyer des messages dans des salons de chat dans lesquels il peut entrer des commandes qui permettent de lister les utilisateurs, de générer une image avec DALL-E, de joue à des jeux simples...
 
-## Consignes
+## 💬 Consignes
 
 -   Sujet libre
 -   A réaliser en binome
@@ -15,7 +15,7 @@ Chat-app est une application Python qui permet d'envoyer et de recevoir des mess
     -   Facultatif : présentation orale sous forme d'une vidéo (2 min maximum) qui présente le projet
 -   Le code doit pouvoir tourner sur les ordi du lycée (éviter d'installer trop de packages)
 
-## Cahier des charges
+## 🔧 Cahier des charges
 
 -   Démarche projet (25 points)
     -   Respect du programme de NSI (POO, récusivité, TAD...)
@@ -31,7 +31,7 @@ Chat-app est une application Python qui permet d'envoyer et de recevoir des mess
     -   Démonstration du projet
     -   Respect des consignes
 
-## Code
+## 💻 Code
 
 ### Arborescence
 
@@ -89,7 +89,7 @@ Voici la représentation des liens entre les différentes classes du projet.
 
 ![Python classes preview](resources/classes.png)
 
-## Installation Windows
+## 🪟 Installation Windows
 
 Ce projet gère des relations client/serveur avec le module `zmq`, il est donc impératif de vérifier qu'il n'y ait pas d'antivirus bloquant les connexions sortantes/entrantes de l'application. L'antivirus par défaut de Windows ne bloquera normalement pas le programme.
 

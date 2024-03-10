@@ -12,7 +12,7 @@ from threading import Thread
 
 
 class Server:
-    def __init__(self, ip: str = "127.0.0.1", port: str = "5555"):
+    def __init__(self, ip: str = "127.0.0.1", port: str = "5555") -> None:
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.ROUTER)
 
@@ -24,25 +24,42 @@ class Server:
         self.users = []
         self.current_game = Game()
 
-    def start(self):
+    def start(self) -> None:
         self.socket.bind(self.address)
         logger.info(f"Server started at {self.address}")
         self.thread = Thread(target=self.listener)
         self.thread.start()
 
     def _get_user(self, user_id: bytes) -> User | None:
-        for usr in self.users:
-            if usr.user_id == user_id:
-                return usr
-        return None
+        """Returns the user corresponding to the 'user_id'.
+
+        Args:
+            user_id (bytes): Id of the user you're looking for.
+
+        Returns:
+            User | None: User object if it was found. None otherwise.
+        """
+        return next((usr for usr in self.users if usr.user_id == user_id), None)
 
     def _get_chat_room(self, chat_room_id: str) -> ChatRoom | None:
-        for chat_room in self.chat_rooms:
-            if chat_room.chat_room_id == chat_room_id:
-                return chat_room
-        return None
+        """Returns the chat room corresponding to the 'chat_room_id'.
 
-    def listener(self):
+        Args:
+            chat_room_id (str): Id of the chat room you're looking for.
+
+        Returns:
+            ChatRoom | None: ChatRoom object if it was found. None otherwise.
+        """
+        return next(
+            (
+                chat_room
+                for chat_room in self.chat_rooms
+                if chat_room.chat_room_id == chat_room_id
+            ),
+            None,
+        )
+
+    def listener(self) -> None:
         while True:
             try:
                 client_id, query = self.socket.recv_multipart()
@@ -57,7 +74,7 @@ class Server:
             except Exception:
                 logger.error(traceback.format_exc())
 
-    def _handle_join(self, client_id, message_data):
+    def _handle_join(self, client_id: bytes, message_data: dict) -> None:
         # Creates a new user for the client if he hasn't one yet
         if not self._get_user(client_id):
             user = User(user_id=client_id)
@@ -85,7 +102,7 @@ class Server:
         self.distribute_message(chat_room, welcome_message)
         logger.info(f"User {user} joined chat room {chat_room.chat_room_id}")
 
-    def _handle_message(self, client_id, message_data):
+    def _handle_message(self, client_id: bytes, message_data: dict) -> None:
 
         chat_room = self._get_chat_room(message_data["room_id"])
         if not chat_room:
@@ -108,13 +125,13 @@ class Server:
 
         logger.info(f"Message from {user} in room {chat_room.chat_room_id}: {content}")
 
-    def send_message_to_client(self, client_id, message):
+    def send_message_to_client(self, client_id: bytes, message: Message) -> None:
         message_content = json.dumps(
             {"author": {"username": message.author.username, "color": message.author.color}, "content": message.content}
         ).encode("utf-8")
         self.socket.send_multipart([client_id, message_content])
 
-    def distribute_message(self, chat_room: ChatRoom, message: Message):
+    def distribute_message(self, chat_room: ChatRoom, message: Message) -> None:
         message_content = json.dumps(
             {
                 "author": {"username": message.author.username, "color": message.author.color},
@@ -124,6 +141,5 @@ class Server:
         ).encode("utf-8")
 
         for user in chat_room.users:
-            client_id = user.user_id
-            if client_id:
+            if client_id := user.user_id:
                 self.socket.send_multipart([client_id, message_content])

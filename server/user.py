@@ -12,9 +12,7 @@ class User:
         return f"User({user_id=}, {username=}, {color=})"
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, User):
-            return self.user_id == other.user_id
-        return False
+        return self.user_id == other.user_id if isinstance(other, User) else False
 
     def get_config(self) -> dict:
         return {"user_id": self.user_id, "username": self.username, "color": self.color}
@@ -24,8 +22,8 @@ class User:
         self.username = config.get("username", self.username)
         self.color = config.get("color", self.color)
 
-    def set_random_color(self):
-        self.color = random.choice(  # Colors from Twitch
+    def set_random_color(self) -> None:
+        self.color = random.choice(
             [
                 "#FE0000",
                 "#0000FE",
