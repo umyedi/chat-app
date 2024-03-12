@@ -13,7 +13,6 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QEvent, QObject
 from PySide6.QtGui import QFontDatabase, QIcon
 
-
 CUR_DIR = os.path.dirname(__file__)
 
 
@@ -82,7 +81,8 @@ class Application(QMainWindow):
         """Opens the Documentation dialog box."""
         dialogs.Documentation(self).window.exec()
 
-    def open_github(self) -> None:
+    @staticmethod
+    def open_github() -> None:
         """Opens the repository in the web browser."""
         webbrowser.open("https://github.com/Umyedi/chat-app")
 

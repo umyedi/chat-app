@@ -41,6 +41,7 @@ class Documentation(QDialog):
         text = self.load_documentation()
         self.label.setText(text)
 
+    @staticmethod
     def load_documentation(self) -> str:
         url = r"https://raw.githubusercontent.com/umyedi/chat-app/main/README.md"
         response = requests.get(url)

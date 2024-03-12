@@ -1,20 +1,22 @@
-from user import User
-from message import Message
+import json
+import traceback
+from threading import Thread
+
+import zmq
+
 from chatroom import ChatRoom
 from commands import CommandsHandler
 from games import Game
 from log import logger
-
-import zmq
-import json
-import traceback
-from threading import Thread
+from message import Message
+from user import User
 
 
 class Server:
     def __init__(self, ip: str = "127.0.0.1", port: str = "5555") -> None:
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.ROUTER)
+        self.thread = None
 
         self.ip = ip
         self.port = port
@@ -34,7 +36,7 @@ class Server:
         """Returns the user corresponding to the 'user_id'.
 
         Args:
-            user_id (bytes): Id of the user you're looking for.
+            user_id (bytes): ID of the user you're looking for.
 
         Returns:
             User | None: User object if it was found. None otherwise.
@@ -45,7 +47,7 @@ class Server:
         """Returns the chat room corresponding to the 'chat_room_id'.
 
         Args:
-            chat_room_id (str): Id of the chat room you're looking for.
+            chat_room_id (str): ID of the chat room you're looking for.
 
         Returns:
             ChatRoom | None: ChatRoom object if it was found. None otherwise.
@@ -86,7 +88,7 @@ class Server:
             if user.username != message_data["user"]["username"]:
                 user.username = message_data["user"]["username"]
 
-        # Creates a new chat rooms if it doesn't already exists
+        # Creates a new chat rooms if it doesn't already exist
         if not self._get_chat_room(message_data["room_id"]):
             chat_room = ChatRoom(message_data["room_id"])
             self.chat_rooms.append(chat_room)

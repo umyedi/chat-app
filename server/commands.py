@@ -68,6 +68,7 @@ class CommandsHandler:
     def help(self):
         return "".join(f"<br>{'&nbsp;'*4}{cmd} - {des}" for cmd, des in self.commands.items())
 
+    @staticmethod
     def time(self):
         return f"It's {datetime.now().strftime('%H:%M:%S')}."
 

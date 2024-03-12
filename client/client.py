@@ -2,6 +2,7 @@ import zmq
 import traceback
 from PySide6.QtCore import QThread, Signal
 
+
 class Client(QThread):
     received_message = Signal(str)
 
