@@ -87,7 +87,7 @@ Chat-app est une application Python qui permet d'envoyer et de recevoir des mess
 
 Voici la représentation des liens entre les différentes classes du projet.
 
-![Python classes preview](resources/classes.png)
+<img alt="Python classes preview" src="resources/classes.png" width="1000"/>
 
 ## 🪟 Installation Windows
 
@@ -151,7 +151,7 @@ Attention, vous obtiendrez surement une erreur car le fichier `credentials.json`
 
 ```
 
-## Utilisation (client)
+## 🧰  Utilisation (client)
 
 ### Connexion au server
 
